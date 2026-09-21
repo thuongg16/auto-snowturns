@@ -1,0 +1,22 @@
+{
+  "newUser": {
+    "name": "QA Test User",
+    "password": "TestPass123!",
+    "title": "Mr",
+    "day": "10",
+    "month": "5",
+    "year": "1996",
+    "firstName": "QA",
+    "lastName": "Test",
+    "address1": "123 Test Street",
+    "country": "United States",
+    "state": "CA",
+    "city": "Los Angeles",
+    "zipcode": "90001",
+    "mobileNumber": "1234567890"
+  },
+  "invalidLogin": {
+    "email": "invalid_user@example.com",
+    "password": "WrongPassword1!"
+  }
+}
