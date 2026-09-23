@@ -16,7 +16,7 @@ export default defineConfig({
    * that environmental flakiness without masking real failures, which
    * still fail on the second attempt.
    */
-  retries: process.env.CI ? 2 : 1,
+  retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: [['html'], ['list']],
   timeout: 30_000,
