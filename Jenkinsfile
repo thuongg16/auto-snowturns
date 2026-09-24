@@ -51,16 +51,19 @@ pipeline {
             // Gives Jenkins a "Test Result" page: every test with its pass/fail and error/stack trace.
             junit testResults: 'results.xml', allowEmptyResults: true
             script {
-                env.TEST_SUMMARY = sh(script: 'node utils/slack-summary.js', returnStdout: true).trim()
+                sh 'node utils/slack-summary.js'
+                env.SLACK_ATTACHMENTS = readFile('slack-attachments.json')
             }
         }
         success {
             slackSend(channel: '#qa-results', color: 'good',
-                message: "✅ *${env.JOB_NAME}* #${env.BUILD_NUMBER} passed\n${env.TEST_SUMMARY}\nTest results: ${env.BUILD_URL}testReport/\nPlaywright report: ${env.BUILD_URL}Playwright_Report/")
+                message: "✅ *${env.JOB_NAME}* #${env.BUILD_NUMBER} passed",
+                attachments: env.SLACK_ATTACHMENTS)
         }
         failure {
             slackSend(channel: '#qa-results', color: 'danger',
-                message: "❌ *${env.JOB_NAME}* #${env.BUILD_NUMBER} failed\n${env.TEST_SUMMARY}\nTest results (click a test for the failure reason): ${env.BUILD_URL}testReport/\nPlaywright report: ${env.BUILD_URL}Playwright_Report/\nConsole: ${env.BUILD_URL}console")
+                message: "❌ *${env.JOB_NAME}* #${env.BUILD_NUMBER} failed",
+                attachments: env.SLACK_ATTACHMENTS)
         }
     }
 }
