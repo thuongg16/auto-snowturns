@@ -18,7 +18,7 @@ export default defineConfig({
    */
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: [['html'], ['list']],
+  reporter: [['html'], ['list'], ['json', { outputFile: 'results.json' }], ['junit', { outputFile: 'results.xml' }]],
   timeout: 30_000,
   expect: {
     timeout: 5_000,
