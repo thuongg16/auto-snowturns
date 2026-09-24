@@ -47,7 +47,7 @@ pipeline {
             archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
             // Serves the Playwright HTML report as a tab on the build page (needs the HTML Publisher plugin).
             publishHTML(target: [reportDir: 'playwright-report', reportFiles: 'index.html',
-                                 reportName: 'Playwright_Report', keepAll: true, allowMissing: true])
+                                 reportName: 'PlaywrightReport', keepAll: true, allowMissing: true])
             // Gives Jenkins a "Test Result" page: every test with its pass/fail and error/stack trace.
             junit testResults: 'results.xml', allowEmptyResults: true
             script {

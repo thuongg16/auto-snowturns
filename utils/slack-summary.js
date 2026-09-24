@@ -1,11 +1,10 @@
-// Builds Slack attachments (one card per test)
+// Builds Slack attachments (one half-width cell per test, two per row)
 // from Playwright's JSON reporter output and writes them to slack-attachments.json.
 // Never throws: Slack should still get a message if results.json is missing.
 const fs = require('fs');
 
 const BUILD_URL = process.env.BUILD_URL || '';
-const MAX_FAILED_CARDS = 25;
-const MAX_ATTACHMENTS = 100;
+const MAX_FAILED_CELLS = 30;
 
 const stripAnsi = (s) => s.replace(/\u001b\[[0-9;]*m/g, '');
 // Slack only requires these three characters to be escaped.
@@ -41,23 +40,36 @@ function collect(suite, out) {
 }
 
 // Opens the test directly in the Playwright HTML report (screenshots, trace, full error).
-const testLink = (t) => (BUILD_URL ? `${BUILD_URL}Playwright_Report/#?testId=${t.id}` : undefined);
+const testLink = (t) => (BUILD_URL ? `${BUILD_URL}PlaywrightReport/#?testId=${t.id}` : undefined);
 
-function card(t, color, label) {
-  return {
-    color,
-    title: `${label} ${t.title}`,
-    title_link: testLink(t),
-    text: t.error ? '```' + esc(clip(t.error, 700)) + '```' : undefined,
-    mrkdwn_in: ['text'],
-    fields: [
-      { title: 'Duration', value: secs(t.duration), short: true },
-      { title: 'Started', value: clock(t.startTime), short: true },
-      { title: 'Attempts', value: String(t.attempts), short: true },
-      { title: 'Location', value: esc(t.location), short: true },
-      { title: 'Project', value: t.project || '-', short: true },
-    ],
-  };
+// One test = one half-width cell. Slack lays out a section's `fields` in two columns,
+// so consecutive tests sit side by side, two per row.
+function cell(t, icon) {
+  const link = testLink(t);
+  const linked = (text) => (link ? `<${link}|${text}>` : text);
+  // Titles look like "TC_API_005 — description": code on the first line, description on the second.
+  const [code, ...rest] = t.title.split(' — ');
+  const heading = rest.length
+    ? `${icon} ${linked(`*${esc(code)}*`)}\n${linked(esc(rest.join(' — ')))}`
+    : `${icon} ${linked(`*${esc(t.title)}*`)}`;
+  const lines = [
+    heading,
+    `⏱ ${secs(t.duration)}  •  🕒 ${clock(t.startTime)}${t.attempts > 1 ? `  •  ${t.attempts} attempts` : ''}`,
+    `📄 ${esc(t.location)}`,
+  ];
+  if (t.error) lines.push('```' + esc(clip(t.error, 250)) + '```');
+  return { type: 'mrkdwn', text: lines.join('\n') };
+}
+
+// A coloured group (one colour bar) holding a heading and the tests as two-column sections.
+function group(color, heading, tests, icon) {
+  if (!tests.length) return [];
+  const blocks = [{ type: 'section', text: { type: 'mrkdwn', text: `*${heading} (${tests.length})*` } }];
+  // A section takes at most 10 fields (5 rows of 2).
+  for (let i = 0; i < tests.length; i += 10) {
+    blocks.push({ type: 'section', fields: tests.slice(i, i + 10).map((t) => cell(t, icon)) });
+  }
+  return [{ color, blocks }];
 }
 
 function build() {
@@ -68,39 +80,30 @@ function build() {
 
   const links = [
     `<${BUILD_URL}testReport/|Test results>`,
-    `<${BUILD_URL}Playwright_Report/|Playwright report>`,
+    `<${BUILD_URL}PlaywrightReport/|Playwright report>`,
     `<${BUILD_URL}console|Console>`,
   ].join('  •  ');
 
-  const attachments = [
-    {
-      color: stats.unexpected ? 'danger' : 'good',
-      text:
-        `*Passed:* ${stats.expected}   *Failed:* ${stats.unexpected}   *Flaky:* ${stats.flaky}   *Skipped:* ${stats.skipped}\n` +
-        `*Duration:* ${Math.round(stats.duration / 1000)}s\n` +
-        (BUILD_URL ? links : ''),
-      mrkdwn_in: ['text'],
-    },
-  ];
+  const summary = {
+    color: stats.unexpected ? 'danger' : 'good',
+    text:
+      `*Passed:* ${stats.expected}   *Failed:* ${stats.unexpected}   *Flaky:* ${stats.flaky}   *Skipped:* ${stats.skipped}\n` +
+      `*Duration:* ${Math.round(stats.duration / 1000)}s\n` +
+      (BUILD_URL ? links : ''),
+    mrkdwn_in: ['text'],
+  };
 
   const failed = tests.filter((t) => t.status === 'unexpected');
-  failed.slice(0, MAX_FAILED_CARDS).forEach((t) => attachments.push(card(t, 'danger', '❌')));
-  if (failed.length > MAX_FAILED_CARDS) {
-    attachments.push({ color: 'danger', text: `…and ${failed.length - MAX_FAILED_CARDS} more failed tests. See the test results link above.` });
-  }
+  const shownFailed = failed.slice(0, MAX_FAILED_CELLS);
 
-  tests.filter((t) => t.status === 'flaky').forEach((t) => attachments.push(card(t, 'warning', '⚠️')));
-
-  // Slack allows at most 100 attachments per message. Every test gets its own card while
-  // they fit; beyond that, the passed tests that don't fit are grouped into compact lists.
-  const passed = tests.filter((t) => t.status === 'expected');
-  const room = MAX_ATTACHMENTS - attachments.length;
-  if (passed.length <= room) {
-    passed.forEach((t) => attachments.push(card(t, 'good', '✅')));
-  } else {
-    passed.slice(0, room - 1).forEach((t) => attachments.push(card(t, 'good', '✅')));
-    const rest = passed.slice(room - 1).map((t) => `✅ ${esc(t.title)} — ${secs(t.duration)}`);
-    attachments.push({ color: 'good', mrkdwn_in: ['text'], text: clip(rest.join('\n'), 7000) });
+  const attachments = [
+    summary,
+    ...group('danger', 'Failed', shownFailed, '❌'),
+    ...group('warning', 'Flaky', tests.filter((t) => t.status === 'flaky'), '⚠️'),
+    ...group('good', 'Passed', tests.filter((t) => t.status === 'expected'), '✅'),
+  ];
+  if (failed.length > MAX_FAILED_CELLS) {
+    attachments.push({ color: 'danger', text: `…and ${failed.length - MAX_FAILED_CELLS} more failed tests. See the test results link above.` });
   }
   return attachments;
 }
