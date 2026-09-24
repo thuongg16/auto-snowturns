@@ -51,7 +51,8 @@ pipeline {
             // Gives Jenkins a "Test Result" page: every test with its pass/fail and error/stack trace.
             junit testResults: 'results.xml', allowEmptyResults: true
             script {
-                sh 'node utils/slack-summary.js'
+                // Saves the run to SQLite for Grafana and builds the Slack message (both best-effort).
+                sh 'node utils/report.js'
                 env.SLACK_ATTACHMENTS = readFile('slack-attachments.json')
             }
         }

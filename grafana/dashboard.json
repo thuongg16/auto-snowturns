@@ -1,0 +1,767 @@
+{
+ "uid": "test-history",
+ "title": "Playwright test history",
+ "tags": [
+  "playwright"
+ ],
+ "timezone": "browser",
+ "schemaVersion": 39,
+ "version": 1,
+ "refresh": "",
+ "time": {
+  "from": "now-30d",
+  "to": "now"
+ },
+ "panels": [
+  {
+   "id": 1,
+   "type": "stat",
+   "title": "Pass rate (latest run)",
+   "datasource": {
+    "type": "frser-sqlite-datasource",
+    "uid": "test-history"
+   },
+   "gridPos": {
+    "x": 0,
+    "y": 0,
+    "w": 6,
+    "h": 4
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "datasource": {
+      "type": "frser-sqlite-datasource",
+      "uid": "test-history"
+     },
+     "queryType": "table",
+     "rawQueryText": "SELECT ROUND(100.0*passed/(passed+failed+flaky+skipped),1) AS \"Pass rate\" FROM runs ORDER BY build DESC LIMIT 1",
+     "queryText": "SELECT ROUND(100.0*passed/(passed+failed+flaky+skipped),1) AS \"Pass rate\" FROM runs ORDER BY build DESC LIMIT 1",
+     "timeColumns": [
+      "time"
+     ]
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "color": {
+      "mode": "thresholds"
+     },
+     "thresholds": {
+      "mode": "absolute",
+      "steps": [
+       {
+        "color": "red",
+        "value": null
+       },
+       {
+        "color": "orange",
+        "value": 90
+       },
+       {
+        "color": "green",
+        "value": 98
+       }
+      ]
+     },
+     "unit": "percent"
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "colorMode": "background",
+    "graphMode": "none",
+    "textMode": "value"
+   }
+  },
+  {
+   "id": 2,
+   "type": "stat",
+   "title": "Failed (latest run)",
+   "datasource": {
+    "type": "frser-sqlite-datasource",
+    "uid": "test-history"
+   },
+   "gridPos": {
+    "x": 6,
+    "y": 0,
+    "w": 6,
+    "h": 4
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "datasource": {
+      "type": "frser-sqlite-datasource",
+      "uid": "test-history"
+     },
+     "queryType": "table",
+     "rawQueryText": "SELECT failed AS Failed FROM runs ORDER BY build DESC LIMIT 1",
+     "queryText": "SELECT failed AS Failed FROM runs ORDER BY build DESC LIMIT 1",
+     "timeColumns": [
+      "time"
+     ]
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "color": {
+      "mode": "thresholds"
+     },
+     "thresholds": {
+      "mode": "absolute",
+      "steps": [
+       {
+        "color": "green",
+        "value": null
+       },
+       {
+        "color": "red",
+        "value": 1
+       }
+      ]
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "colorMode": "background",
+    "graphMode": "none",
+    "textMode": "value"
+   }
+  },
+  {
+   "id": 3,
+   "type": "stat",
+   "title": "Flaky (latest run)",
+   "datasource": {
+    "type": "frser-sqlite-datasource",
+    "uid": "test-history"
+   },
+   "gridPos": {
+    "x": 12,
+    "y": 0,
+    "w": 6,
+    "h": 4
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "datasource": {
+      "type": "frser-sqlite-datasource",
+      "uid": "test-history"
+     },
+     "queryType": "table",
+     "rawQueryText": "SELECT flaky AS Flaky FROM runs ORDER BY build DESC LIMIT 1",
+     "queryText": "SELECT flaky AS Flaky FROM runs ORDER BY build DESC LIMIT 1",
+     "timeColumns": [
+      "time"
+     ]
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "color": {
+      "mode": "thresholds"
+     },
+     "thresholds": {
+      "mode": "absolute",
+      "steps": [
+       {
+        "color": "green",
+        "value": null
+       },
+       {
+        "color": "orange",
+        "value": 1
+       }
+      ]
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "colorMode": "background",
+    "graphMode": "none",
+    "textMode": "value"
+   }
+  },
+  {
+   "id": 4,
+   "type": "stat",
+   "title": "Duration (latest run)",
+   "datasource": {
+    "type": "frser-sqlite-datasource",
+    "uid": "test-history"
+   },
+   "gridPos": {
+    "x": 18,
+    "y": 0,
+    "w": 6,
+    "h": 4
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "datasource": {
+      "type": "frser-sqlite-datasource",
+      "uid": "test-history"
+     },
+     "queryType": "table",
+     "rawQueryText": "SELECT ROUND(duration_ms/1000.0) AS Duration FROM runs ORDER BY build DESC LIMIT 1",
+     "queryText": "SELECT ROUND(duration_ms/1000.0) AS Duration FROM runs ORDER BY build DESC LIMIT 1",
+     "timeColumns": [
+      "time"
+     ]
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "color": {
+      "mode": "thresholds"
+     },
+     "thresholds": {
+      "mode": "absolute",
+      "steps": [
+       {
+        "color": "blue",
+        "value": null
+       }
+      ]
+     },
+     "unit": "s"
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "colorMode": "background",
+    "graphMode": "none",
+    "textMode": "value"
+   }
+  },
+  {
+   "id": 5,
+   "type": "barchart",
+   "title": "Results per run",
+   "datasource": {
+    "type": "frser-sqlite-datasource",
+    "uid": "test-history"
+   },
+   "gridPos": {
+    "x": 0,
+    "y": 4,
+    "w": 16,
+    "h": 8
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "datasource": {
+      "type": "frser-sqlite-datasource",
+      "uid": "test-history"
+     },
+     "queryType": "table",
+     "rawQueryText": "SELECT 'build #' || build AS Build, passed AS Passed, failed AS Failed, flaky AS Flaky FROM runs ORDER BY build",
+     "queryText": "SELECT 'build #' || build AS Build, passed AS Passed, failed AS Failed, flaky AS Flaky FROM runs ORDER BY build",
+     "timeColumns": [
+      "time"
+     ]
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "custom": {
+      "fillOpacity": 85
+     }
+    },
+    "overrides": [
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "Passed"
+      },
+      "properties": [
+       {
+        "id": "color",
+        "value": {
+         "mode": "fixed",
+         "fixedColor": "green"
+        }
+       }
+      ]
+     },
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "Failed"
+      },
+      "properties": [
+       {
+        "id": "color",
+        "value": {
+         "mode": "fixed",
+         "fixedColor": "red"
+        }
+       }
+      ]
+     },
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "Flaky"
+      },
+      "properties": [
+       {
+        "id": "color",
+        "value": {
+         "mode": "fixed",
+         "fixedColor": "orange"
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "options": {
+    "stacking": "normal",
+    "xField": "Build",
+    "legend": {
+     "displayMode": "list",
+     "placement": "bottom"
+    },
+    "xTickLabelRotation": -45
+   }
+  },
+  {
+   "id": 6,
+   "type": "piechart",
+   "title": "Latest run by status",
+   "datasource": {
+    "type": "frser-sqlite-datasource",
+    "uid": "test-history"
+   },
+   "gridPos": {
+    "x": 16,
+    "y": 4,
+    "w": 8,
+    "h": 8
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "datasource": {
+      "type": "frser-sqlite-datasource",
+      "uid": "test-history"
+     },
+     "queryType": "table",
+     "rawQueryText": "SELECT CASE status WHEN 'expected' THEN 'Passed' WHEN 'unexpected' THEN 'Failed' WHEN 'flaky' THEN 'Flaky' ELSE 'Skipped' END AS Status, COUNT(*) AS Tests FROM tests WHERE build=(SELECT MAX(build) FROM runs) GROUP BY status",
+     "queryText": "SELECT CASE status WHEN 'expected' THEN 'Passed' WHEN 'unexpected' THEN 'Failed' WHEN 'flaky' THEN 'Flaky' ELSE 'Skipped' END AS Status, COUNT(*) AS Tests FROM tests WHERE build=(SELECT MAX(build) FROM runs) GROUP BY status",
+     "timeColumns": [
+      "time"
+     ]
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {},
+    "overrides": [
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "Passed"
+      },
+      "properties": [
+       {
+        "id": "color",
+        "value": {
+         "mode": "fixed",
+         "fixedColor": "green"
+        }
+       }
+      ]
+     },
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "Failed"
+      },
+      "properties": [
+       {
+        "id": "color",
+        "value": {
+         "mode": "fixed",
+         "fixedColor": "red"
+        }
+       }
+      ]
+     },
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "Flaky"
+      },
+      "properties": [
+       {
+        "id": "color",
+        "value": {
+         "mode": "fixed",
+         "fixedColor": "orange"
+        }
+       }
+      ]
+     },
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "Skipped"
+      },
+      "properties": [
+       {
+        "id": "color",
+        "value": {
+         "mode": "fixed",
+         "fixedColor": "gray"
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "options": {
+    "pieType": "donut",
+    "legend": {
+     "displayMode": "table",
+     "placement": "right",
+     "values": [
+      "value"
+     ]
+    },
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "/^Tests$/",
+     "values": true
+    }
+   }
+  },
+  {
+   "id": 7,
+   "type": "timeseries",
+   "title": "Total duration per run",
+   "datasource": {
+    "type": "frser-sqlite-datasource",
+    "uid": "test-history"
+   },
+   "gridPos": {
+    "x": 0,
+    "y": 12,
+    "w": 12,
+    "h": 8
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "datasource": {
+      "type": "frser-sqlite-datasource",
+      "uid": "test-history"
+     },
+     "queryType": "time series",
+     "rawQueryText": "SELECT CAST(strftime('%s', started) AS INTEGER) AS time, ROUND(duration_ms/1000.0) AS \"Duration (s)\" FROM runs ORDER BY started",
+     "queryText": "SELECT CAST(strftime('%s', started) AS INTEGER) AS time, ROUND(duration_ms/1000.0) AS \"Duration (s)\" FROM runs ORDER BY started",
+     "timeColumns": [
+      "time"
+     ]
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "s",
+     "custom": {
+      "lineWidth": 2,
+      "fillOpacity": 15,
+      "showPoints": "always"
+     }
+    },
+    "overrides": []
+   }
+  },
+  {
+   "id": 8,
+   "type": "bargauge",
+   "title": "Most failing tests (30 days)",
+   "datasource": {
+    "type": "frser-sqlite-datasource",
+    "uid": "test-history"
+   },
+   "gridPos": {
+    "x": 12,
+    "y": 12,
+    "w": 12,
+    "h": 8
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "datasource": {
+      "type": "frser-sqlite-datasource",
+      "uid": "test-history"
+     },
+     "queryType": "table",
+     "rawQueryText": "SELECT title AS Test, COUNT(*) AS \"Failed runs\" FROM tests WHERE status='unexpected' GROUP BY title ORDER BY 2 DESC LIMIT 10",
+     "queryText": "SELECT title AS Test, COUNT(*) AS \"Failed runs\" FROM tests WHERE status='unexpected' GROUP BY title ORDER BY 2 DESC LIMIT 10",
+     "timeColumns": [
+      "time"
+     ]
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "color": {
+      "mode": "fixed",
+      "fixedColor": "red"
+     },
+     "min": 0
+    },
+    "overrides": []
+   },
+   "options": {
+    "orientation": "horizontal",
+    "displayMode": "gradient",
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "/^Failed runs$/",
+     "values": true
+    },
+    "namePlacement": "top"
+   }
+  },
+  {
+   "id": 9,
+   "type": "bargauge",
+   "title": "Flakiest tests (30 days)",
+   "datasource": {
+    "type": "frser-sqlite-datasource",
+    "uid": "test-history"
+   },
+   "gridPos": {
+    "x": 0,
+    "y": 20,
+    "w": 12,
+    "h": 8
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "datasource": {
+      "type": "frser-sqlite-datasource",
+      "uid": "test-history"
+     },
+     "queryType": "table",
+     "rawQueryText": "SELECT title AS Test, COUNT(*) AS \"Flaky runs\" FROM tests WHERE status='flaky' GROUP BY title ORDER BY 2 DESC LIMIT 10",
+     "queryText": "SELECT title AS Test, COUNT(*) AS \"Flaky runs\" FROM tests WHERE status='flaky' GROUP BY title ORDER BY 2 DESC LIMIT 10",
+     "timeColumns": [
+      "time"
+     ]
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "color": {
+      "mode": "fixed",
+      "fixedColor": "orange"
+     },
+     "min": 0
+    },
+    "overrides": []
+   },
+   "options": {
+    "orientation": "horizontal",
+    "displayMode": "gradient",
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "/^Flaky runs$/",
+     "values": true
+    },
+    "namePlacement": "top"
+   }
+  },
+  {
+   "id": 10,
+   "type": "table",
+   "title": "Slowest tests (latest run)",
+   "datasource": {
+    "type": "frser-sqlite-datasource",
+    "uid": "test-history"
+   },
+   "gridPos": {
+    "x": 12,
+    "y": 20,
+    "w": 12,
+    "h": 8
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "datasource": {
+      "type": "frser-sqlite-datasource",
+      "uid": "test-history"
+     },
+     "queryType": "table",
+     "rawQueryText": "SELECT title AS Test, ROUND(duration_ms/1000.0,1) AS \"Duration (s)\", attempts AS Attempts FROM tests WHERE build=(SELECT MAX(build) FROM runs) ORDER BY duration_ms DESC LIMIT 10",
+     "queryText": "SELECT title AS Test, ROUND(duration_ms/1000.0,1) AS \"Duration (s)\", attempts AS Attempts FROM tests WHERE build=(SELECT MAX(build) FROM runs) ORDER BY duration_ms DESC LIMIT 10",
+     "timeColumns": [
+      "time"
+     ]
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {},
+    "overrides": []
+   },
+   "options": {
+    "showHeader": true
+   }
+  },
+  {
+   "id": 11,
+   "type": "table",
+   "title": "All tests in latest run (click a test name for details)",
+   "datasource": {
+    "type": "frser-sqlite-datasource",
+    "uid": "test-history"
+   },
+   "gridPos": {
+    "x": 0,
+    "y": 28,
+    "w": 24,
+    "h": 12
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "datasource": {
+      "type": "frser-sqlite-datasource",
+      "uid": "test-history"
+     },
+     "queryType": "table",
+     "rawQueryText": "SELECT title AS Test, CASE status WHEN 'expected' THEN 'Passed' WHEN 'unexpected' THEN 'Failed' WHEN 'flaky' THEN 'Flaky' ELSE 'Skipped' END AS Status, ROUND(duration_ms/1000.0,1) AS \"Duration (s)\", attempts AS Attempts, project AS Project, file || ':' || line AS Location, started AS Started, url FROM tests WHERE build=(SELECT MAX(build) FROM runs) ORDER BY CASE status WHEN 'unexpected' THEN 0 WHEN 'flaky' THEN 1 ELSE 2 END, title",
+     "queryText": "SELECT title AS Test, CASE status WHEN 'expected' THEN 'Passed' WHEN 'unexpected' THEN 'Failed' WHEN 'flaky' THEN 'Flaky' ELSE 'Skipped' END AS Status, ROUND(duration_ms/1000.0,1) AS \"Duration (s)\", attempts AS Attempts, project AS Project, file || ':' || line AS Location, started AS Started, url FROM tests WHERE build=(SELECT MAX(build) FROM runs) ORDER BY CASE status WHEN 'unexpected' THEN 0 WHEN 'flaky' THEN 1 ELSE 2 END, title",
+     "timeColumns": [
+      "time"
+     ]
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {},
+    "overrides": [
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "Test"
+      },
+      "properties": [
+       {
+        "id": "links",
+        "value": [
+         {
+          "title": "Open test details",
+          "url": "${__data.fields.url}",
+          "targetBlank": true
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "url"
+      },
+      "properties": [
+       {
+        "id": "custom.hidden",
+        "value": true
+       }
+      ]
+     },
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "Status"
+      },
+      "properties": [
+       {
+        "id": "custom.cellOptions",
+        "value": {
+         "type": "color-text"
+        }
+       },
+       {
+        "id": "mappings",
+        "value": [
+         {
+          "type": "value",
+          "options": {
+           "Passed": {
+            "color": "green",
+            "index": 0
+           },
+           "Failed": {
+            "color": "red",
+            "index": 1
+           },
+           "Flaky": {
+            "color": "orange",
+            "index": 2
+           },
+           "Skipped": {
+            "color": "gray",
+            "index": 3
+           }
+          }
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   "options": {
+    "showHeader": true,
+    "sortBy": []
+   }
+  }
+ ]
+}
