@@ -40,7 +40,7 @@ function collect(suite, out) {
 }
 
 // Opens the test directly in the Playwright HTML report (screenshots, trace, full error).
-const testLink = (t) => (BUILD_URL ? `${BUILD_URL}PlaywrightReport/#?testId=${t.id}` : undefined);
+const testLink = (t) => (BUILD_URL ? `${BUILD_URL}PlaywrightReport/index.html#?testId=${t.id}` : undefined);
 
 // One test = one half-width cell. Slack lays out a section's `fields` in two columns,
 // so consecutive tests sit side by side, two per row.
