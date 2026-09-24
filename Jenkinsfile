@@ -47,12 +47,12 @@ pipeline {
             archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
         }
         success {
-            slackSend(channel: '#your-channel', color: 'good',
+            slackSend(channel: '#qa-results', color: 'good',
                 message: "✅ ${env.JOB_NAME} #${env.BUILD_NUMBER} passed\n${env.BUILD_URL}")
         }
 
         failure {
-            slackSend(channel: '#your-channel', color: 'danger',
+            slackSend(channel: '#qa-results', color: 'danger',
                 message: "❌ ${env.JOB_NAME} #${env.BUILD_NUMBER} failed\n${env.BUILD_URL}")
         }
     }
