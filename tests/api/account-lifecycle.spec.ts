@@ -3,7 +3,7 @@ import { buildApiAccountPayload, generateUniqueEmail } from '../../utils/helpers
 
 // docs/test-cases/api.md — Section 1 (Happy: TC_API_005-008), Section 2 (Negative: N07)
 
-test('TC_API_005 — POST createAccount creates a new user', async ({ request }) => {
+test('TC_API_005 — POST createAccount creates a new user', { tag: ['@critical'] }, async ({ request }) => {
   const payload = buildApiAccountPayload(generateUniqueEmail('api_tc005'));
 
   const response = await request.post('/api/createAccount', { form: payload });

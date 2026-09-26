@@ -3,7 +3,7 @@ import { test, expect } from '../../fixtures/test-fixtures';
 // docs/test-cases/products.md — Section 1 (Happy: TC_PROD_004), Section 2 (Negative: N01),
 // Section 3 (Edge: E01)
 
-test('TC_PROD_004 — Search for products using a valid keyword', async ({ page, productsPage }) => {
+test('TC_PROD_004 — Search for products using a valid keyword', { tag: ['@smoke', '@critical'] }, async ({ page, productsPage }) => {
   await productsPage.goto();
   await productsPage.search('Dress');
 

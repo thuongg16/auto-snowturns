@@ -6,7 +6,7 @@ import { generateUniqueEmail, getNewUserDetails, registerNewUser } from '../../u
 
 const newUserDetails = getNewUserDetails();
 
-test('TC_AUTH_001 — Register a new user with valid information', async ({
+test('TC_AUTH_001 — Register a new user with valid information', { tag: ['@critical'] }, async ({
   page,
   homePage,
   loginPage,
@@ -64,7 +64,7 @@ test('TC_AUTH_N01 — Register with an existing email address', async ({
   await expect(accountPage.firstNameInput).toBeHidden();
 });
 
-test('TC_AUTH_N02 — Register with missing required information', async ({ page, loginPage, accountPage }) => {
+test('TC_AUTH_N02 — Register with missing required information', { tag: ['@critical'] }, async ({ page, loginPage, accountPage }) => {
   const email = generateUniqueEmail('auth_n02');
 
   await loginPage.goto();

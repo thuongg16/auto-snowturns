@@ -14,7 +14,7 @@ test.beforeEach(async ({ page, loginPage, productsPage, cartPage }) => {
   await addFirstProductToCartAndCheckout(productsPage, cartPage);
 });
 
-test('TC_CHECKOUT_001 — View checkout page with address and order details while authenticated', async ({
+test('TC_CHECKOUT_001 — View checkout page with address and order details while authenticated', { tag: ['@critical'] }, async ({
   page,
   checkoutPage,
 }) => {
@@ -27,7 +27,7 @@ test('TC_CHECKOUT_001 — View checkout page with address and order details whil
   await expect(checkoutPage.placeOrderLink).toBeVisible();
 });
 
-test('TC_CHECKOUT_002 — Complete checkout with valid payment details and place an order', async ({
+test('TC_CHECKOUT_002 — Complete checkout with valid payment details and place an order', { tag: ['@smoke', '@critical'] }, async ({
   page,
   checkoutPage,
   paymentPage,

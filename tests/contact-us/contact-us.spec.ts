@@ -4,7 +4,7 @@ import { generateUniqueEmail } from '../../utils/helpers';
 // docs/test-cases/contact-us.md — Section 1 (Happy: TC_CONTACT_001), Section 2 (Negative: N01),
 // Section 3 (Edge: E01)
 
-test('TC_CONTACT_001 — Submit the Contact Us form with all fields completed', async ({ contactUsPage }) => {
+test('TC_CONTACT_001 — Submit the Contact Us form with all fields completed', { tag: ['@smoke', '@critical'] }, async ({ contactUsPage }) => {
   await contactUsPage.goto();
 
   await contactUsPage.submit({

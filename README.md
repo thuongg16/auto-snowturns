@@ -19,6 +19,9 @@ test-data/               Static, non-sensitive test data (JSON)
 tests/                   Playwright test specs
 utils/                   Reusable test helpers (e.g. unique test data generation)
 playwright.config.ts    Playwright configuration
+eslint.config.mjs       Lint rules (machine-checked test standards)
+CLAUDE.md               AI assistant entry point: source of truth, project map, standards
+.claude/rules/          Test code and test documentation standards
 ```
 
 See `docs/` for the full manual QA process: test plan, test scenarios, test cases, and manual execution records.
@@ -33,10 +36,13 @@ npx playwright install
 ## Running Tests
 
 ```bash
-npm test                 # run the full suite (chromium, firefox, webkit)
+npm test                 # run the full suite (api + chromium projects)
 npm run test:headed      # run with browser UI visible
+npm run test:smoke       # 8 fast main-flow tests (@smoke)
+npm run test:critical    # tests whose test case is Priority High (@critical)
 npm run report            # open the last HTML report
 npm run typecheck         # type-check the project without emitting output
+npm run lint              # lint (enforces the test standards in .claude/rules/test-code.md)
 ```
 
 The base URL defaults to `https://automationexercise.com/` and can be overridden with an environment variable:

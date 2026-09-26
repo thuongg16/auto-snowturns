@@ -29,6 +29,13 @@ pipeline {
             }
         }
 
+        stage('Lint') {
+            steps {
+                sh 'npm run lint'
+                sh 'npm run check:overview'
+            }
+        }
+
         stage('Install Playwright browsers') {
             steps {
                 sh 'npx playwright install --with-deps'

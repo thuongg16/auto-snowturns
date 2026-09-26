@@ -20,7 +20,7 @@ test.describe('login with a registered account', () => {
     await homePage.logout();
   });
 
-  test('TC_AUTH_002 — Login with valid credentials', async ({ page, homePage, loginPage }) => {
+  test('TC_AUTH_002 — Login with valid credentials', { tag: ['@smoke', '@critical'] }, async ({ page, homePage, loginPage }) => {
     await loginPage.goto();
     await loginPage.login(email, password);
 
@@ -31,7 +31,7 @@ test.describe('login with a registered account', () => {
     await expect(homePage.signupLoginLink).toBeHidden();
   });
 
-  test('TC_AUTH_N06 — Login with a registered email and an incorrect password', async ({
+  test('TC_AUTH_N06 — Login with a registered email and an incorrect password', { tag: ['@critical'] }, async ({
     page,
     loginPage,
   }) => {
@@ -71,7 +71,7 @@ test.describe('login without a matching account', () => {
     await loginPage.goto();
   });
 
-  test('TC_AUTH_N05 — Login with an unregistered email and password combination', async ({
+  test('TC_AUTH_N05 — Login with an unregistered email and password combination', { tag: ['@critical'] }, async ({
     page,
     loginPage,
     homePage,

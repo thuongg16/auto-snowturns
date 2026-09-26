@@ -3,7 +3,7 @@ import { generateUniqueEmail } from '../../utils/helpers';
 
 // docs/test-cases/newsletter.md — Section 1 (Happy: TC_NEWS_001-002), Section 2 (Negative: N01)
 
-test('TC_NEWS_001 — Subscribe to the newsletter with a valid email on the home page', async ({
+test('TC_NEWS_001 — Subscribe to the newsletter with a valid email on the home page', { tag: ['@smoke'] }, async ({
   homePage,
 }) => {
   await homePage.goto();

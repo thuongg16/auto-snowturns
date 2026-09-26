@@ -9,7 +9,7 @@ test('TC_CART_001 — View an empty cart', async ({ homePage, cartPage }) => {
   await expect(cartPage.emptyCartMessage).toBeVisible();
 });
 
-test('TC_CART_002 — Add products to the cart and view cart contents', async ({ productsPage, cartPage }) => {
+test('TC_CART_002 — Add products to the cart and view cart contents', { tag: ['@smoke', '@critical'] }, async ({ productsPage, cartPage }) => {
   await productsPage.goto();
   await productsPage.addProductToCart(0);
   await productsPage.addedToCartModal.continueShopping();
@@ -39,7 +39,7 @@ test('TC_CART_003 — Cart contents persist across page navigation', async ({
   await expect(cartPage.cartRows).toHaveCount(1);
 });
 
-test('TC_CART_004 — Remove a product from the cart', async ({ productsPage, cartPage }) => {
+test('TC_CART_004 — Remove a product from the cart', { tag: ['@critical'] }, async ({ productsPage, cartPage }) => {
   await productsPage.goto();
   await productsPage.addProductToCart(0);
   await productsPage.addedToCartModal.continueShopping();
@@ -52,7 +52,7 @@ test('TC_CART_004 — Remove a product from the cart', async ({ productsPage, ca
   await expect(cartPage.cartRows).toHaveCount(1);
 });
 
-test('TC_CART_N01 — Attempt to proceed to checkout while not logged in', async ({
+test('TC_CART_N01 — Attempt to proceed to checkout while not logged in', { tag: ['@critical'] }, async ({
   page,
   productsPage,
   cartPage,

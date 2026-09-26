@@ -3,7 +3,7 @@ import { generateUniqueEmail } from '../../utils/helpers';
 
 // docs/test-cases/products.md — Section 1 (Happy: TC_PROD_005-007), Section 2 (Negative: N02)
 
-test('TC_PROD_005 — View individual product detail information', async ({
+test('TC_PROD_005 — View individual product detail information', { tag: ['@critical'] }, async ({
   page,
   productsPage,
   productDetailPage,
@@ -20,7 +20,7 @@ test('TC_PROD_005 — View individual product detail information', async ({
   await expect(productDetailPage.addToCartButton).toBeVisible();
 });
 
-test('TC_PROD_006 — Add a product to the cart with a specified quantity from the detail page', async ({
+test('TC_PROD_006 — Add a product to the cart with a specified quantity from the detail page', { tag: ['@critical'] }, async ({
   productsPage,
   productDetailPage,
 }) => {

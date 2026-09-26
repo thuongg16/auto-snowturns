@@ -3,7 +3,7 @@ import { test, expect } from '../../fixtures/test-fixtures';
 // docs/test-cases/api.md — Section 1 (Happy: TC_API_001-002), Section 2 (Negative: N01-N02),
 // Section 3 (Edge: E01)
 
-test('TC_API_001 — GET productsList returns the full product list', async ({ request }) => {
+test('TC_API_001 — GET productsList returns the full product list', { tag: ['@smoke', '@critical'] }, async ({ request }) => {
   const response = await request.get('/api/productsList');
   const body = await response.json();
 

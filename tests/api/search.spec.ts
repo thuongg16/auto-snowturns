@@ -2,7 +2,7 @@ import { test, expect } from '../../fixtures/test-fixtures';
 
 // docs/test-cases/api.md — Section 1 (Happy: TC_API_003), Section 2 (Negative: N03)
 
-test('TC_API_003 — POST searchProduct with a valid parameter returns matching products', async ({
+test('TC_API_003 — POST searchProduct with a valid parameter returns matching products', { tag: ['@critical'] }, async ({
   request,
 }) => {
   const response = await request.post('/api/searchProduct', { form: { search_product: 'top' } });

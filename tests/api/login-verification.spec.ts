@@ -3,7 +3,7 @@ import { buildApiAccountPayload, generateUniqueEmail } from '../../utils/helpers
 
 // docs/test-cases/api.md — Section 1 (Happy: TC_API_004), Section 2 (Negative: N04-N06)
 
-test('TC_API_004 — POST verifyLogin with valid, registered credentials confirms the user exists', async ({
+test('TC_API_004 — POST verifyLogin with valid, registered credentials confirms the user exists', { tag: ['@critical'] }, async ({
   request,
 }) => {
   const email = generateUniqueEmail('api_login_tc004');
@@ -19,7 +19,7 @@ test('TC_API_004 — POST verifyLogin with valid, registered credentials confirm
   expect(body.message).toBe('User exists!');
 });
 
-test('TC_API_N04 — POST verifyLogin with non-matching credentials returns a 404 response code', async ({
+test('TC_API_N04 — POST verifyLogin with non-matching credentials returns a 404 response code', { tag: ['@critical'] }, async ({
   request,
 }) => {
   const response = await request.post('/api/verifyLogin', {
