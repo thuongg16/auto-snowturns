@@ -14,7 +14,10 @@
       "mcp__atlassian__getAccessibleAtlassianResources",
       "mcp__atlassian__searchJiraIssuesUsingJql",
       "Skill(ticket)",
-      "Skill(ticket:*)"
+      "Skill(ticket:*)",
+      "Bash(git fetch *)",
+      "Bash(git remote *)",
+      "WebFetch(domain:plugins.jenkins.io)"
     ]
   }
 }

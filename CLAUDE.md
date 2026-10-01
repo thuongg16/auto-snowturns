@@ -50,6 +50,7 @@ Never claim a test passes without running it. Never weaken an assertion, add a r
 
 - Branches are created only when the user approves a `/ticket` plan: `feature/<username>-<title-of-ticket>-<ticket-id>` from `main` (see `.claude/rules/git.md`). Other work stays on the current branch.
 - Ask before `git commit` or `git push`, every time.
+- Ask before triggering, replaying or rebuilding a Jenkins build (`jenkins` MCP `triggerBuild` / `replayBuild` / `rebuildBuild`), every time: each build posts to Slack `#qa-results`. Reading jobs, builds, logs and test results needs no confirmation.
 - Ground UI behaviour, messages and API responses in the live site or existing Page Objects; do not invent them.
 - Reuse existing Page Objects, fixtures and helpers before creating new ones.
 - The site is flaky under load ("queue full") and ad-heavy; `retries` in `playwright.config.ts` absorbs that. Read the note in `fixtures/test-fixtures.ts` before touching ad or network handling.

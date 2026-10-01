@@ -98,6 +98,7 @@ Human approval gates: scenario plan, test cases, code review, commit/push. Git r
 - `utils/report.js`: reads `results.json`; (1) appends the run to SQLite `~/.test-history/history.db` (tables `runs`, `tests`); (2) writes `slack-attachments.json` (per-test cells with a deep link `PlaywrightReport/index.html#?testId=<id>`).
 - Slack channel `#qa-results`. Grafana `http://localhost:3000`, dashboard "Playwright test history" (`grafana/dashboard.json`), data source SQLite. Details: `claude/docs/grafana.md`.
 - Jenkins runs at `localhost:9090` with CSP relaxed by `~/.jenkins/init.groovy.d/relax-csp.groovy`; links work only on this machine.
+- Jenkins MCP: plugin `mcp-server` (needs Jenkins ≥ 2.541.3) serves `http://localhost:9090/mcp-server/mcp`. Claude Code reaches it as the `jenkins` MCP server, registered in **local** scope (`~/.claude.json`, not `.mcp.json`) because its header carries the API token. Register once per machine from `.env` (`JENKINS_USER` = Jenkins user ID, `JENKINS_API_TOKEN`): `set -a; . ./.env; set +a; claude mcp add --scope local --transport http jenkins http://localhost:9090/mcp-server/mcp --header "Authorization: Basic $(printf '%s:%s' "$JENKINS_USER" "$JENKINS_API_TOKEN" | base64)"`. Read tools (`getBuild`, `getBuildLog`, `getTestResults`, ...) are free; `triggerBuild` / `replayBuild` / `rebuildBuild` need the user's yes every time (each build posts to Slack).
 
 ## 8. Folder guide
 
