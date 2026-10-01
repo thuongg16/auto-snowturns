@@ -40,6 +40,11 @@ for (const viewport of RESPONSIVE_VIEWPORTS) {
     test.use({ viewport });
 
     test('TC_RESP_001 — Main public pages have no horizontal scroll', { tag: ['@critical'] }, async ({ page }) => {
+      // Known site defect (SCRUM-2; claude/tickets/pasted-2026-09-28.md §12): at 768px the
+      // `feedback@automationexercise.com` link on /contact_us cannot wrap and ends at x≈802,
+      // so the page scrolls ~38px sideways (ads excluded). Expected to fail until the site
+      // fixes it; an unexpected pass means it was fixed and this line must be removed.
+      test.fail(viewport.width === 768, 'Site defect: /contact_us e-mail link overflows at 768px');
       for (const path of PUBLIC_PAGES) {
         await page.goto(path, { waitUntil: 'domcontentloaded' });
         // Soft: report every page that overflows, not only the first.

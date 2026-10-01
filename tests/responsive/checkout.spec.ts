@@ -29,6 +29,11 @@ for (const viewport of RESPONSIVE_VIEWPORTS) {
       paymentPage,
       orderConfirmationPage,
     }) => {
+      // Known site defect (SCRUM-2; claude/tickets/pasted-2026-09-28.md §12): at 768px the
+      // payment form's own `div.col-md-12.form-group` covers "Name on Card"
+      // (`[data-qa="name-on-card"]`), so it cannot be clicked. Expected to fail until the
+      // site fixes it; an unexpected pass means it was fixed and this line must be removed.
+      test.fail(viewport.width === 768, 'Site defect: payment form fields overlap at 768px');
       // The cart is kept in the shared session; start from exactly one product.
       await cartPage.clear();
       await addFirstProductToCartAndCheckout(productsPage, cartPage);

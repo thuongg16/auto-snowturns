@@ -220,5 +220,8 @@ export async function expectWithinViewport(locator: Locator, { clickable = true 
     await locator.evaluate((element) => element.scrollIntoView({ block: 'center', inline: 'center' }));
     await expect(locator).toBeInViewport({ ratio: 1, timeout: 1_000 });
   }).toPass({ timeout: 10_000 });
-  if (clickable) await locator.click({ trial: true });
+  // Bounded so a covered control fails as an ordinary error naming the covering element,
+  // not as a test timeout (which `test.fail()` does not count as the expected failure).
+  // 15s leaves room for the ad handlers, which run inside this action.
+  if (clickable) await locator.click({ trial: true, timeout: 15_000 });
 }

@@ -26,7 +26,7 @@ One file name per feature across docs and tests (see `.claude/rules/test-docs.md
 
 Plus `tests/home.spec.ts` (1 smoke test, no TC ID). Every documented test case is automated. A scenario can have more than one case.
 
-Responsive tests (`tests/responsive/`) run each case at 375 / 768 / 1280px. Gaps: `docs/test-execution/` has only `auth-execution.md` (all "Not Run"); `docs/user-flows/` is empty.
+Responsive tests (`tests/responsive/`) run each case at 375 / 768 / 1280px. Known site defects at 768px are marked `test.fail()` with the evidence in the spec (SCRUM-2): TC_RESP_001 (`/contact_us` e-mail link overflows) and TC_RESP_007 (payment form fields overlap); an unexpected pass means the site fixed it and the marker must be removed. Gaps: `docs/test-execution/` has only `auth-execution.md` (all "Not Run"); `docs/user-flows/` is empty.
 
 ## 3. Code map
 
