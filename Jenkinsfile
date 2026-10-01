@@ -5,6 +5,8 @@ pipeline {
         // Jenkins runs as a background process and doesn't source ~/.zshrc,
         // so nvm's Node install isn't on PATH by default — add it explicitly.
         PATH = "/Users/thuong/.nvm/versions/node/v22.9.0/bin:${env.PATH}"
+        // Test card for the payment form: a "Secret text" credential, masked in the log.
+        TEST_CARD_NUMBER = credentials('test-card-number')
     }
 
     triggers {

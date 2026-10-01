@@ -13,7 +13,7 @@ These test cases implement the scenarios defined in `docs/test-scenarios/auth.md
 - Test Data:
   - Name: `QA Test User`
   - Email: a newly generated unique address, e.g. `auth_tc001_<timestamp>@example.com`
-  - Password: `TestPass123!`
+  - Password: a newly generated random password
   - Date of birth: any valid day/month/year
   - First name: `QA`, Last name: `Test`
   - Address: `123 Test Street`, Country: `United States`, State: `CA`, City: `Los Angeles`, Zipcode: `90001`, Mobile number: `1234567890`
@@ -92,7 +92,7 @@ These test cases implement the scenarios defined in `docs/test-scenarios/auth.md
 - Test Data:
   - Name: `QA Delete Test`
   - Email: a newly generated unique address, e.g. `auth_tc004_<timestamp>@example.com`
-  - Password: `TestPass123!`
+  - Password: a newly generated random password
   - Registration fields: same categories as TC_AUTH_001 (address, country, state, city, zipcode, mobile number)
 
 #### Steps
@@ -268,7 +268,7 @@ Country: leave at the default selected value
 - Preconditions: The email used has no associated account.
 - Test Data:
   - Email: `unregistered_<timestamp>@example.com`
-  - Password: `TestPass123!` (syntactically valid, arbitrary)
+  - Password: a newly generated random password (arbitrary)
 
 #### Steps
 
@@ -315,7 +315,7 @@ Country: leave at the default selected value
 - Test Data:
   - Name: `QA Deleted Login Test`
   - Email: a newly generated unique address, e.g. `auth_n09_<timestamp>@example.com`
-  - Password: `TestPass123!`
+  - Password: a newly generated random password
 
 #### Steps
 

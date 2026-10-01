@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_fill_form",
+      "mcp__playwright__browser_click",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:support.atlassian.com)",
+      "Bash(node -e 'JSON.parse\\(require\\(\"fs\"\\).readFileSync\\(\".mcp.json\",\"utf8\"\\)\\);console.log\\(\"mcp.json ok\"\\)')",
+      "Bash(claude mcp *)",
+      "Bash(env)",
+      "mcp__atlassian__getAccessibleAtlassianResources",
+      "mcp__atlassian__searchJiraIssuesUsingJql",
+      "Skill(ticket)",
+      "Skill(ticket:*)"
+    ]
+  }
+}

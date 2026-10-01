@@ -1,7 +1,7 @@
 # Project overview (AI context)
 
 Read this first when planning. It summarizes what exists so you can open only the files a task needs.
-Last updated: 2026-09-27. Updated by `/ticket`, `/test-cases` and `/generate-tests`, and by any other change to features, tests, Page Objects, tags, commands or CI. `npm run check:overview` (run in CI) verifies the counts, tags and Page Object list.
+Last updated: 2026-09-28. Updated by `/ticket`, `/test-cases` and `/generate-tests`, and by any other change to features, tests, Page Objects, tags, commands or CI. `npm run check:overview` (run in CI) verifies the counts, tags and Page Object list.
 
 ## 1. What this project is
 
@@ -22,10 +22,11 @@ One file name per feature across docs and tests (see `.claude/rules/test-docs.md
 | `contact-us.md` | CONTACT | 3 | 3 | 3 | contact-us |
 | `newsletter.md` | NEWS | 3 | 3 | 3 | subscription (component) |
 | `api.md` | API | 15 | 16 | 16 | none (request API) |
+| `responsive.md` | RESP | 8 | 16 | 16 | home, products, product-detail, cart, login, account, checkout, payment, contact-us (at 375 / 768 / 1280px) |
 
 Plus `tests/home.spec.ts` (1 smoke test, no TC ID). Every documented test case is automated. A scenario can have more than one case.
 
-Gaps: `docs/test-execution/` has only `auth-execution.md` (all "Not Run"); `docs/user-flows/` is empty.
+Responsive tests (`tests/responsive/`) run each case at 375 / 768 / 1280px. Gaps: `docs/test-execution/` has only `auth-execution.md` (all "Not Run"); `docs/user-flows/` is empty.
 
 ## 3. Code map
 
@@ -33,12 +34,12 @@ Gaps: `docs/test-execution/` has only `auth-execution.md` (all "Not Run"); `docs
 
 | File | Methods |
 |---|---|
-| `home.page.ts` | goto, goToSignupLogin, goToProducts, goToCart, goToDeleteAccount, logout, expectLoggedInAs, expectLoggedOut |
+| `home.page.ts` | goto, goToSignupLogin, goToProducts, goToCart, goToDeleteAccount, logout, expectLoggedInAs, expectLoggedOut; nav link locators incl. home, test cases, API testing, contact us |
 | `login.page.ts` | goto, login, startSignup |
 | `account.page.ts` | fillAccountDetails, createAccount, expectAccountCreated, expectAccountDeleted, continueToHome |
-| `products.page.ts` | goto, search, openCategory, openBrand, viewProduct, addProductToCart |
-| `product-detail.page.ts` | addToCart, submitReview |
-| `cart.page.ts` | goto, rowForProduct, removeProduct, proceedToCheckout |
+| `products.page.ts` | goto, search, openCategory, openBrand, viewProduct, addProductToCart, cardName, cardPrice, cardAddToCart, cardViewProduct |
+| `product-detail.page.ts` | goto, addToCart, submitReview |
+| `cart.page.ts` | goto, rowForProduct, removeProduct, clear, proceedToCheckout |
 | `checkout.page.ts` | placeOrder |
 | `payment.page.ts` | fillPaymentDetails, pay |
 | `order-confirmation.page.ts` | expectOrderPlaced, downloadInvoice |
@@ -46,13 +47,13 @@ Gaps: `docs/test-execution/` has only `auth-execution.md` (all "Not Run"); `docs
 | `components/added-to-cart-modal.component.ts` | waitUntilVisible, goToCart, continueShopping |
 | `components/subscription.component.ts` | subscribe |
 
-**Fixtures**: `fixtures/test-fixtures.ts` exposes each page as a fixture (`homePage`, `loginPage`, `accountPage`, `productsPage`, `productDetailPage`, `cartPage`, `checkoutPage`, `paymentPage`, `orderConfirmationPage`, `contactUsPage`). Specs import `test`/`expect` from here. It also holds the note explaining why ad blocking was reverted.
+**Fixtures**: `fixtures/test-fixtures.ts` exposes each page as a fixture (`homePage`, `loginPage`, `accountPage`, `productsPage`, `productDetailPage`, `cartPage`, `checkoutPage`, `paymentPage`, `orderConfirmationPage`, `contactUsPage`). Specs import `test`/`expect` from here. `authTest` adds a logged-in session shared per worker (one account per worker, login once; fixture `account`), used by `tests/checkout/` (login is setup there). It also holds the note explaining why ad blocking was reverted.
 
-**Helpers** (`utils/helpers.ts`): `generateUniqueEmail`, `getNewUserDetails`, `registerNewUser` (UI), `registerNewUserViaApi` (fast setup), `buildApiAccountPayload`, `addFirstProductToCartAndCheckout`.
+**Helpers** (`utils/helpers.ts`): `generateUniqueEmail`, `generatePassword`, `buildPaymentDetails`, `getNewUserDetails`, `registerNewUser` (UI), `registerNewUserViaApi` (fast setup), `buildApiAccountPayload`, `addFirstProductToCartAndCheckout`; ads: `installAdHandlers`, `waitForPage`; responsive: `RESPONSIVE_VIEWPORTS`, `expectNoHorizontalScroll`, `expectWithinViewport`.
 
-**Tags**: `@smoke` (8 tests: home, TC_AUTH_002, TC_PROD_004, TC_CART_002, TC_CHECKOUT_002, TC_CONTACT_001, TC_NEWS_001, TC_API_001) and `@critical` (the 22 cases with `Priority: High`). Scripts: `npm run test:smoke`, `npm run test:critical`.
+**Tags**: `@smoke` (8 tests: home, TC_AUTH_002, TC_PROD_004, TC_CART_002, TC_CHECKOUT_002, TC_CONTACT_001, TC_NEWS_001, TC_API_001) and `@critical` (the 30 cases with `Priority: High`). Scripts: `npm run test:smoke`, `npm run test:critical`.
 
-**Test data**: `test-data/users.json` (`newUser`). **API reference**: `postman/automation-exercise-api.postman_collection.json` + `postman/environments/`.
+**Test data**: `test-data/users.json` (`newUser`, no password). Passwords are generated per account (`generatePassword`); payment details come from `buildPaymentDetails` (card number from the `TEST_CARD_NUMBER` secret, generated CVC/expiry), and the paying tests turn off trace/video/screenshot. **Secrets**: local git-ignored `.env` (template `.env.example`, loaded by `playwright.config.ts`); Jenkins credential `test-card-number` (Secret text); GitHub Actions secret `TEST_CARD_NUMBER`. **API reference**: `postman/automation-exercise-api.postman_collection.json` + `postman/environments/`.
 
 **Config** (`playwright.config.ts`): `BASE_URL` env (default the live site), `fullyParallel`, CI: `retries: 2`, `workers: 1`; timeouts 30s test / 5s expect; trace on first retry, screenshot and video on failure; reporters `html`, `list`, `json` → `results.json`, `junit` → `results.xml`.
 
@@ -107,5 +108,6 @@ Human approval gates: scenario plan, test cases, code review, commit/push. Git r
 | `claude/docs/` | Docs for/by Claude (this file, `grafana.md`) | yes |
 | `claude/tickets/` | `/ticket` reports | written by `/ticket` |
 | `.claude/rules/`, `.claude/commands/` | Rules and commands | yes |
+| `.mcp.json` | Project MCP servers for Claude Code: `playwright` (`@playwright/mcp`, an interactive browser used by `/ticket`, `/test-cases` and `/generate-tests` to check behaviour and locators on the live site, and for debugging UI failures; rules in `.claude/rules/live-site-mcp.md`; not used by the test suite or CI), and `atlassian` (official Atlassian Rovo MCP server, `https://mcp.atlassian.com/v2/mcp`, Jira Cloud only; `/ticket` reads Jira issues, comments, attachments and linked Confluence pages through it, read-only, with the `curl` + `JIRA_TOKEN` path as fallback; each user logs in once via `/mcp`) | yes |
 | `grafana/` | Dashboard JSON | yes |
-| `playwright-report/`, `test-results/`, `results.*`, `slack-attachments.json` | Generated, git-ignored | no |
+| `playwright-report/`, `test-results/`, `results.*`, `slack-attachments.json`, `.playwright-mcp/` | Generated, git-ignored | no |

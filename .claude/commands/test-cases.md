@@ -1,7 +1,7 @@
 ---
 description: Step 2 of the test workflow. Turn the scenarios approved by /ticket into test cases in docs/test-cases (update existing cases or add new ones), after a plan the user approves.
 argument-hint: [ticket report path | ticket ID | scenario IDs] [notes]
-allowed-tools: Read, Glob, Grep, Write, Edit, Bash(git status:*), Bash(git diff:*), Bash(git branch:*), Bash(git switch:*), Bash(git log:*)
+allowed-tools: Read, Glob, Grep, Write, Edit, Bash(git status:*), Bash(git diff:*), Bash(git branch:*), Bash(git switch:*), Bash(git log:*), mcp__playwright__browser_navigate, mcp__playwright__browser_navigate_back, mcp__playwright__browser_snapshot, mcp__playwright__browser_click, mcp__playwright__browser_type, mcp__playwright__browser_fill_form, mcp__playwright__browser_select_option, mcp__playwright__browser_hover, mcp__playwright__browser_press_key, mcp__playwright__browser_wait_for, mcp__playwright__browser_handle_dialog, mcp__playwright__browser_tabs, mcp__playwright__browser_resize, mcp__playwright__browser_take_screenshot, mcp__playwright__browser_network_requests, mcp__playwright__browser_close
 ---
 
 You are a Senior QA Engineer. Step 2 of the test workflow: **write test cases** for scenarios that were already approved and applied by `/ticket`.
@@ -30,6 +30,7 @@ Input: $ARGUMENTS
 - The report: requirements (R1...), section 6 "Test case outline", section 7 "Automation notes", open questions.
 - For each affected feature: `docs/test-cases/<feature>.md` **in full** (existing IDs, sections, traceability table), and the scenarios in scope.
 - For grounding steps and expected results: the related Page Objects in `src/pages/` (real labels, `data-qa` hooks, messages) and existing specs in `tests/<feature>/`. Do not invent UI text, messages or API fields; if a value is unknown, write it as an open question.
+- **Walk each planned case on the live site** with the Playwright MCP browser, following `.claude/rules/live-site-mcp.md`: perform the steps in order and copy the exact labels, messages and resulting URLs into the steps and expected results. A step the site does not support yet (new behaviour from the ticket) stays as the ticket describes it, flagged in the plan as "not yet on the live site". A difference between the site and the scenario is an open question, not something to resolve silently.
 
 If the report still has blocking open questions for these scenarios, list them and ask before planning.
 

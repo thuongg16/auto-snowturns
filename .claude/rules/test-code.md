@@ -9,6 +9,12 @@ Rules marked **[lint]** are enforced by `npm run lint` (`eslint.config.mjs`); th
 - Page Object pattern (see `src/pages/login.page.ts`): `readonly page`, `readonly` Locator fields assigned in the constructor, action methods (`goto()`, `login()`), and `expect…()` methods for reusable assertions.
 - Shared setup goes in `utils/helpers.ts`. Prefer API setup (`registerNewUserViaApi`) when the setup itself is not under test.
 
+## Logged-in tests
+
+- When login is **setup** (not the behaviour under test), import `authTest` instead of `test` from `fixtures/test-fixtures.ts`: each worker registers one account and logs in once, and tests start from that saved session. The `account` fixture gives its `name`, `email`, `password`.
+- The session and the cart are shared by all tests in a worker: start with `cartPage.clear()` when the cart matters, and never log out, delete the account, or change its details in an `authTest` test.
+- Tests of login, logout, registration and account deletion keep creating their own account (`registerNewUserViaApi` / `registerNewUser`).
+
 ## Naming and traceability
 
 - Test title: `TC_<AREA>_<ID> — <title from docs/test-cases>`, e.g. `TC_AUTH_002 — Login with valid credentials`. The ID must exist in `docs/test-cases/<area>.md`.
@@ -49,6 +55,7 @@ Never use XPath, generated class names, or index-based selectors when a stable o
 - Each test is independent and can run alone or in parallel (`fullyParallel: true`).
 - Unique data via `generateUniqueEmail('<area>_<purpose>')`; static data from `test-data/`.
 - No secrets or real personal data in code or `test-data/`.
+- No passwords or card data in code, `test-data/` or `postman/`: generate passwords with `generatePassword()` and payment details with `buildPaymentDetails()`; the card number comes from the `TEST_CARD_NUMBER` secret (`.env` locally, CI credentials). Tests that type card data turn off `trace`, `video` and `screenshot`.
 
 ## Focus and skipping
 

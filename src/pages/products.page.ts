@@ -42,6 +42,23 @@ export class ProductsPage {
     await this.productCards.nth(index).locator('a:has-text("View Product")').click();
   }
 
+  // Parts of a product card (`.productinfo` is the static face; the hover overlay repeats it).
+  cardName(index = 0) {
+    return this.productCards.nth(index).locator('.productinfo p');
+  }
+
+  cardPrice(index = 0) {
+    return this.productCards.nth(index).locator('.productinfo h2');
+  }
+
+  cardAddToCart(index = 0) {
+    return this.productCards.nth(index).locator('.productinfo a.add-to-cart');
+  }
+
+  cardViewProduct(index = 0) {
+    return this.productCards.nth(index).locator('.choose a');
+  }
+
   async addProductToCart(index = 0) {
     const card = this.productCards.nth(index);
     await card.hover();

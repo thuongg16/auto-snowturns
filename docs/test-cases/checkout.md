@@ -34,10 +34,10 @@ These test cases implement the scenarios defined in `docs/test-scenarios/checkou
 - Scenario: CHECKOUT-S02
 - Preconditions: Tester is logged in, has at least one product in the cart, and has reached the checkout page.
 - Test Data:
-  - Name on Card: `QA Checkout`
-  - Card Number: `4111111111111111` (a syntactically valid test card number; no real payment is processed)
-  - CVC: `123`
-  - Expiry Month: `12`, Expiry Year: `2030`
+  - Name on Card: the logged-in account's name
+  - Card Number: the test card number from the `TEST_CARD_NUMBER` secret (never stored in the repo; no real payment is processed)
+  - CVC: a generated 3-digit number
+  - Expiry Month / Year: a generated future date
 
 #### Steps
 

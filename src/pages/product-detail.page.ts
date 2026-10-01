@@ -31,6 +31,10 @@ export class ProductDetailPage {
     this.reviewSuccessMessage = page.getByText('Thank you for your review.');
   }
 
+  async goto(id = 1) {
+    await this.page.goto(`/product_details/${id}`, { waitUntil: 'domcontentloaded' });
+  }
+
   async addToCart(quantity?: string) {
     if (quantity) {
       await this.quantityInput.fill(quantity);

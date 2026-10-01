@@ -23,6 +23,7 @@ docs/test-plans/test-plan.md
   | `contact-us.md` | `CONTACT` | `tests/contact-us/` |
   | `newsletter.md` | `NEWS` | `tests/newsletter/` |
   | `api.md` | `API` | `tests/api/` |
+  | `responsive.md` | `RESP` | `tests/responsive/` |
 
   A new feature gets a new row: kebab-case file name, a new short uppercase area code.
 - Case IDs: `TC_<AREA>_001` for happy, `TC_<AREA>_N01` for negative, `TC_<AREA>_E01` for edge. Never renumber an existing ID.

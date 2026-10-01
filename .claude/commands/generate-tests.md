@@ -1,7 +1,7 @@
 ---
 description: Step 3 of the test workflow. Generate or update Playwright specs and Page Objects for the test cases approved by /test-cases, after a code plan the user approves, then typecheck, lint and run them.
 argument-hint: [ticket report path | ticket ID | TC IDs] [notes]
-allowed-tools: Read, Glob, Grep, Write, Edit, Bash(git status:*), Bash(git diff:*), Bash(git branch:*), Bash(git switch:*), Bash(git log:*), Bash(npm run typecheck), Bash(npm run lint), Bash(npx eslint:*), Bash(npx playwright test:*)
+allowed-tools: Read, Glob, Grep, Write, Edit, Bash(git status:*), Bash(git diff:*), Bash(git branch:*), Bash(git switch:*), Bash(git log:*), Bash(npm run typecheck), Bash(npm run lint), Bash(npx eslint:*), Bash(npx playwright test:*), mcp__playwright__browser_navigate, mcp__playwright__browser_navigate_back, mcp__playwright__browser_snapshot, mcp__playwright__browser_find, mcp__playwright__browser_evaluate, mcp__playwright__browser_click, mcp__playwright__browser_type, mcp__playwright__browser_fill_form, mcp__playwright__browser_select_option, mcp__playwright__browser_hover, mcp__playwright__browser_press_key, mcp__playwright__browser_wait_for, mcp__playwright__browser_handle_dialog, mcp__playwright__browser_tabs, mcp__playwright__browser_resize, mcp__playwright__browser_take_screenshot, mcp__playwright__browser_console_messages, mcp__playwright__browser_network_requests, mcp__playwright__browser_close
 ---
 
 You are a Senior QA Automation Engineer. Step 3 of the test workflow: **turn approved test cases into automated tests** that follow `.claude/rules/test-code.md`.
@@ -45,7 +45,7 @@ Append to the report (replace it if it exists):
 - Action: **Update** an existing test (same title, changed steps/assertions) or **Add** a new test.
 - Spec placement: add to the spec that already covers the same feature and setup; create a new `tests/<feature>/<topic>.spec.ts` only when no spec fits.
 - For each test: the setup (e.g. `registerNewUserViaApi`), the Page Object calls in order, and the assertions mapped to the numbered Expected Result.
-- Locators: follow the priority in the rules; state where each new locator comes from (existing `data-qa`, role, visible text quoted from the test case). If a locator cannot be grounded, list it as an open question.
+- Locators: follow the priority in the rules; state where each new locator comes from (existing `data-qa`, role, visible text quoted from the test case). Find every new locator on the live site with the Playwright MCP browser, following `.claude/rules/live-site-mcp.md`: open the page in the state the test reaches, read the element's `data-qa` (with `browser_evaluate`, read-only, e.g. `el => el.getAttribute('data-qa')`), else its role and accessible name from `browser_snapshot`, and check it matches exactly one element. If a locator cannot be grounded, list it as an open question.
 - Retired test cases: say how the matching test will be handled; never delete a test without the user's explicit decision.
 
 ## 4. Stop for review
@@ -77,7 +77,7 @@ Run, in order, and fix only within the approved plan:
 4. The full specs you touched, to catch regressions in neighbours: `npx playwright test <spec files>`
 
 If a test fails:
-- Read the error and the trace/screenshot under `test-results/`.
+- Read the error and the trace/screenshot under `test-results/`. If that is not enough, repeat the failing steps in the Playwright MCP browser (snapshot, console, network) to see whether the locator, the timing or the site is at fault. The MCP browser is for diagnosis only; a test passes only when `npx playwright test` says so.
 - A wrong locator or timing in **your** code: fix it and re-run (at most 3 attempts per test).
 - The site behaves differently from the test case, or "queue full" / ads interfere: stop and report it with the evidence; do not change the expected result to match.
 - Never weaken an assertion, add `waitForTimeout`, `test.skip`, or extra retries to get green.

@@ -1,4 +1,8 @@
+import { existsSync } from 'node:fs';
 import { defineConfig, devices } from '@playwright/test';
+
+// Local secrets (TEST_CARD_NUMBER) live in the git-ignored .env; CI injects them as credentials.
+if (existsSync('.env')) process.loadEnvFile('.env');
 
 /**
  * See https://playwright.dev/docs/test-configuration.

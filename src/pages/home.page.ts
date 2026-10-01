@@ -14,6 +14,10 @@ export class HomePage {
   readonly loggedInIndicator: Locator;
   readonly productsLink: Locator;
   readonly cartLink: Locator;
+  readonly homeLink: Locator;
+  readonly testCasesLink: Locator;
+  readonly apiTestingLink: Locator;
+  readonly contactUsLink: Locator;
   readonly subscription: SubscriptionForm;
 
   constructor(page: Page) {
@@ -28,6 +32,10 @@ export class HomePage {
     this.loggedInIndicator = nav.getByText(/Logged in as/);
     this.productsLink = nav.locator('a[href="/products"]');
     this.cartLink = nav.locator('a[href="/view_cart"]');
+    this.homeLink = nav.locator('a[href="/"]');
+    this.testCasesLink = nav.locator('a[href="/test_cases"]');
+    this.apiTestingLink = nav.locator('a[href="/api_list"]');
+    this.contactUsLink = nav.locator('a[href="/contact_us"]');
     this.subscription = new SubscriptionForm(page);
   }
 

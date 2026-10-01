@@ -1,4 +1,4 @@
-import { test as base } from '@playwright/test';
+import { test as base, BrowserContext } from '@playwright/test';
 import { HomePage } from '../src/pages/home.page';
 import { LoginPage } from '../src/pages/login.page';
 import { AccountPage } from '../src/pages/account.page';
@@ -9,6 +9,7 @@ import { CheckoutPage } from '../src/pages/checkout.page';
 import { PaymentPage } from '../src/pages/payment.page';
 import { OrderConfirmationPage } from '../src/pages/order-confirmation.page';
 import { ContactUsPage } from '../src/pages/contact-us.page';
+import { generateUniqueEmail, installAdHandlers, registerNewUserViaApi } from '../utils/helpers';
 
 type Pages = {
   homePage: HomePage;
@@ -38,10 +39,18 @@ type Pages = {
  * in playwright.config.ts) for a poorly-understood one (breaking some
  * behavior the app's own JS depends on). Do not re-add this without solid
  * evidence it helps across multiple runs, not just one.
+ *
+ * Instead, the two ads that cover the page (the full-screen vignette and the
+ * mobile top anchor) are closed only when they are on screen: see
+ * `installAdHandlers` and `waitForPage` in utils/helpers.ts.
  */
 
 /** Extends the base test with ready-to-use Page Objects. */
 export const test = base.extend<Pages>({
+  page: async ({ page }, use) => {
+    await installAdHandlers(page);
+    await use(page);
+  },
   homePage: async ({ page }, use) => {
     await use(new HomePage(page));
   },
@@ -71,6 +80,41 @@ export const test = base.extend<Pages>({
   },
   contactUsPage: async ({ page }, use) => {
     await use(new ContactUsPage(page));
+  },
+});
+
+type Account = { name: string; email: string; password: string };
+type AuthSession = { account: Account; storageState: Awaited<ReturnType<BrowserContext['storageState']>> };
+
+/**
+ * `test` with a logged-in account: each worker registers one account (API),
+ * logs in once, and every test in that worker starts from the saved session
+ * instead of logging in again.
+ *
+ * Use it only when login is setup, not the behaviour under test. Do not use it
+ * for tests that log out, delete the account, or change its details: the
+ * session and account are shared by all tests in the worker. The cart is kept
+ * in the session too, so start with `cartPage.clear()` when the cart matters.
+ */
+export const authTest = test.extend<{ account: Account }, { authSession: AuthSession }>({
+  authSession: [
+    async ({ browser }, use, workerInfo) => {
+      const context = await browser.newContext({ baseURL: workerInfo.project.use.baseURL });
+      const page = await context.newPage();
+      const name = 'QA Auth Worker';
+      const email = generateUniqueEmail(`auth_worker${workerInfo.parallelIndex}`);
+      const { password } = await registerNewUserViaApi(page, new LoginPage(page), name, email);
+      const storageState = await context.storageState();
+      await context.close();
+      await use({ account: { name, email, password }, storageState });
+    },
+    { scope: 'worker' },
+  ],
+  storageState: async ({ authSession }, use) => {
+    await use(authSession.storageState);
+  },
+  account: async ({ authSession }, use) => {
+    await use(authSession.account);
   },
 });
 

@@ -7,7 +7,7 @@
   "variable": [
     { "key": "baseUrl", "value": "https://automationexercise.com" },
     { "key": "testEmail", "value": "" },
-    { "key": "testPassword", "value": "TestPass123!" }
+    { "key": "testPassword", "value": "" }
   ],
   "item": [
     {
@@ -21,7 +21,8 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.collectionVariables.set('testEmail', `postman_test_${Date.now()}@example.com`);"
+                  "pm.collectionVariables.set('testEmail', `postman_test_${Date.now()}@example.com`);",
+                  "pm.collectionVariables.set('testPassword', `Qa-${pm.variables.replaceIn('{{$randomPassword}}')}1!`);"
                 ]
               }
             },

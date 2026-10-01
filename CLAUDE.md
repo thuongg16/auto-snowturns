@@ -38,10 +38,11 @@ Never claim a test passes without running it. Never weaken an assertion, add a r
 @.claude/rules/test-code.md
 @.claude/rules/test-docs.md
 @.claude/rules/git.md
+@.claude/rules/live-site-mcp.md
 
 ## Workflow commands
 
-- `/ticket <url | text> [notes]`: analyze a requirement ticket (GitHub, GitLab, Jira, Redmine, a web page, or pasted text), map it to existing coverage, and write a report with a scenario change plan to `claude/tickets/`. After approval it updates the matching `docs/test-scenarios/<feature>.md` (edit existing scenarios, add new ones) or creates a new file for a new feature. Private sources need `GITHUB_TOKEN`, `GITLAB_TOKEN`, `JIRA_EMAIL`+`JIRA_TOKEN` or `REDMINE_API_KEY` in the environment.
+- `/ticket <url | text> [notes]`: analyze a requirement ticket (GitHub, GitLab, Jira, Redmine, a web page, or pasted text), map it to existing coverage, and write a report with a scenario change plan to `claude/tickets/`. After approval it updates the matching `docs/test-scenarios/<feature>.md` (edit existing scenarios, add new ones) or creates a new file for a new feature. Jira is read through the `atlassian` MCP server (log in once with `/mcp`); other private sources, and Jira when the MCP server is unavailable, need `GITHUB_TOKEN`, `GITLAB_TOKEN`, `JIRA_EMAIL`+`JIRA_TOKEN` or `REDMINE_API_KEY` in the environment.
 - `/test-cases [report | ticket ID | scenario IDs]`: step 2. On the ticket's branch, plan test cases for the approved scenarios (update / add in `docs/test-cases/<feature>.md`, traceability table included), stop for approval, then apply.
 - `/generate-tests [report | ticket ID | TC IDs]`: step 3. On the ticket's branch, plan specs and Page Object changes for the approved test cases, stop for approval, then write the code and run typecheck, lint and the new tests.
 

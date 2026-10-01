@@ -9,3 +9,9 @@ node_modules/
 /results.json
 /results.xml
 /slack-attachments.json
+
+# Playwright MCP browser output (snapshots, console logs, screenshots)
+/.playwright-mcp/
+
+# Local secrets (see .env.example)
+.env

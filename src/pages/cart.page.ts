@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 import { SubscriptionForm } from './components/subscription.component';
 
 /** The shopping cart page (`/view_cart`). */
@@ -34,6 +34,18 @@ export class CartPage {
 
   async removeProduct(index = 0) {
     await this.cartRows.nth(index).locator('.cart_quantity_delete').click();
+  }
+
+  /**
+   * Removes every product. The cart lives in the session, so tests that reuse a
+   * logged-in account (authTest) call this to start from an empty cart.
+   */
+  async clear() {
+    await this.goto();
+    for (let count = await this.cartRows.count(); count > 0; count--) {
+      await this.removeProduct(0);
+      await expect(this.cartRows).toHaveCount(count - 1);
+    }
   }
 
   async proceedToCheckout() {

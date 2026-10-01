@@ -1,7 +1,6 @@
 {
   "newUser": {
     "name": "QA Test User",
-    "password": "TestPass123!",
     "title": "Mr",
     "day": "10",
     "month": "5",

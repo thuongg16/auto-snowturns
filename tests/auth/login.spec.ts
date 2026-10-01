@@ -1,5 +1,5 @@
 import { test, expect } from '../../fixtures/test-fixtures';
-import { generateUniqueEmail, registerNewUserViaApi } from '../../utils/helpers';
+import { generatePassword, generateUniqueEmail, registerNewUserViaApi, waitForPage } from '../../utils/helpers';
 
 // docs/test-cases/auth.md — Section 1 (Happy: TC_AUTH_002), Section 2 (Negative: N05-N08),
 // Section 3 (Edge: E01, E02)
@@ -18,6 +18,9 @@ test.describe('login with a registered account', () => {
     email = generateUniqueEmail('auth_login');
     ({ password } = await registerNewUserViaApi(page, loginPage, name, email));
     await homePage.logout();
+    // Logout redirects to /login. Waiting for it makes a "queue full" logout fail here:
+    // otherwise the session survives and /login redirects the test to the home page.
+    await waitForPage(page, /\/login$/);
   });
 
   test('TC_AUTH_002 — Login with valid credentials', { tag: ['@smoke', '@critical'] }, async ({ page, homePage, loginPage }) => {
@@ -84,7 +87,7 @@ test.describe('login without a matching account', () => {
   });
 
   test('TC_AUTH_N07 — Login with an unregistered email', async ({ page, loginPage }) => {
-    await loginPage.login(generateUniqueEmail('unregistered'), 'TestPass123!');
+    await loginPage.login(generateUniqueEmail('unregistered'), generatePassword());
 
     await expect(page).toHaveURL(/\/login$/);
     await expect(loginPage.loginErrorMessage).toBeVisible();
