@@ -186,11 +186,22 @@ export const RESPONSIVE_VIEWPORTS = [
   { width: 1280, height: 800 },
 ] as const;
 
-/** Asserts the page does not scroll horizontally (content no wider than the viewport). */
+/**
+ * Asserts the page does not scroll horizontally (content no wider than the viewport).
+ * Google ad slots are left out of the measurement: AdSense sometimes renders a
+ * viewport-wide ad iframe inside a half-width column (e.g. `aswift_2`, 768px wide at
+ * x=384 on /signup at 768px), which is ad sizing, not the site's layout. They are
+ * taken out of the layout only for this synchronous read and restored right after.
+ */
 export async function expectNoHorizontalScroll(page: Page, { soft = false } = {}) {
-  const overflow = await page.evaluate(
-    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
-  );
+  const overflow = await page.evaluate(() => {
+    const ads = Array.from(document.querySelectorAll<HTMLElement>('ins.adsbygoogle'));
+    const styles = ads.map((ad) => ad.style.cssText);
+    ads.forEach((ad) => ad.style.setProperty('display', 'none', 'important'));
+    const px = document.documentElement.scrollWidth - document.documentElement.clientWidth;
+    ads.forEach((ad, i) => (ad.style.cssText = styles[i]));
+    return px;
+  });
   const check = soft ? expect.soft : expect;
   check(overflow, `horizontal overflow in px on ${page.url()}`).toBeLessThanOrEqual(0);
 }

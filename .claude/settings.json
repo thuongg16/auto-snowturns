@@ -21,7 +21,20 @@
       "mcp__atlassian__getJiraIssue",
       "mcp__jenkins__getJob",
       "mcp__jenkins__triggerBuild",
-      "mcp__jenkins__getBuild"
+      "mcp__jenkins__getBuild",
+      "mcp__jenkins__getTestResults",
+      "Bash(npx playwright *)",
+      "mcp__playwright__browser_resize",
+      "mcp__playwright__browser_evaluate",
+      "Bash(rm -rf /private/tmp/claude-501/-Users-thuong-my-project-automation-exercise/48388e41-4555-46e1-9a88-a31c1212a0a2/scratchpad/tr)",
+      "Bash(mkdir -p /private/tmp/claude-501/-Users-thuong-my-project-automation-exercise/48388e41-4555-46e1-9a88-a31c1212a0a2/scratchpad/tr)",
+      "Bash(unzip -q ~/.jenkins/workspace/automation-exercise/test-results/responsive-forms-768px-TC--91eb2-tion-forms-can-be-completed-chromium-retry1/trace.zip)",
+      "Bash(python3 -)",
+      "Bash(grep -oE '\"\\(id|name|src|width|height|data-google[^\"]*|aria-label|title\\)\":\"[^\"]{0,90}')",
+      "mcp__playwright__browser_close",
+      "Bash(echo \"typecheck exit=$?\")",
+      "Bash(echo \"lint exit=$?\")",
+      "Bash(echo \"overview exit=$?\")"
     ]
   }
 }
