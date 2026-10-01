@@ -51,6 +51,7 @@ Never claim a test passes without running it. Never weaken an assertion, add a r
 - Branches are created only when the user approves a `/ticket` plan: `feature/<username>-<title-of-ticket>-<ticket-id>` from `main` (see `.claude/rules/git.md`). Other work stays on the current branch.
 - Ask before `git commit` or `git push`, every time.
 - Jenkins builds (`jenkins` MCP `triggerBuild` / `replayBuild` / `rebuildBuild`) post to Slack `#qa-results`. Trigger one without asking when the user asks to run the tests, or asks to do a Jira ticket (read live from Jira in that same request) whose task is to run them; otherwise ask first. Reading jobs, builds, logs and test results needs no confirmation.
+- Slack (`slack` MCP, user's own OAuth login): reading channels, threads and search needs no confirmation. Post only when the user asks, or a Jira ticket they asked you to do says to notify Slack; otherwise ask first. Post test results in `#qa-results`, as a thread reply to the Jenkins build message when one exists. Never post secrets, card data, or anything outside test results without the user's explicit yes; never create channels, schedule messages, or edit/delete others' messages.
 - Ground UI behaviour, messages and API responses in the live site or existing Page Objects; do not invent them.
 - Reuse existing Page Objects, fixtures and helpers before creating new ones.
 - The site is flaky under load ("queue full") and ad-heavy; `retries` in `playwright.config.ts` absorbs that. Read the note in `fixtures/test-fixtures.ts` before touching ad or network handling.
