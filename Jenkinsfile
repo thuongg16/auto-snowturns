@@ -12,6 +12,10 @@ pipeline {
     triggers {
         // Once a day; 'H' lets Jenkins pick the minute within the 8am hour to spread load.
         cron('H 8 * * *')
+        // After every push to main: Jenkins runs on localhost, so GitHub cannot reach it with a
+        // webhook; instead it checks the repo every 5 minutes and builds only when there are
+        // new commits (no new commit = no build, no Slack message).
+        pollSCM('H/5 * * * *')
     }
 
     options {

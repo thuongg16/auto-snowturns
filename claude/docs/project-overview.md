@@ -94,6 +94,7 @@ Human approval gates: scenario plan, test cases, code review, commit/push. Git r
 
 ## 7. CI and reporting (Jenkins, local machine)
 
+- `Jenkinsfile` triggers: daily `cron('H 8 * * *')`, and `pollSCM('H/5 * * * *')` so every push to `main` is built within ~5 minutes (Jenkins is on localhost, so no GitHub webhook); each build reports to Slack and Grafana. A trigger change takes effect after the first build that runs the new Jenkinsfile.
 - `Jenkinsfile`: `npm ci` → type check → lint + overview check → install browsers → `npx playwright test` → post: archive report, `publishHTML` (tab `PlaywrightReport`), `junit`, `node utils/report.js`, `slackSend`.
 - `utils/report.js`: reads `results.json`; (1) appends the run to SQLite `~/.test-history/history.db` (tables `runs`, `tests`); (2) writes `slack-attachments.json` (per-test cells with a deep link `PlaywrightReport/index.html#?testId=<id>`).
 - Slack channel `#qa-results`. Grafana `http://localhost:3000`, dashboard "Playwright test history" (`grafana/dashboard.json`), data source SQLite. Details: `claude/docs/grafana.md`.
