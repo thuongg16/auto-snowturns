@@ -17,7 +17,11 @@
       "Skill(ticket:*)",
       "Bash(git fetch *)",
       "Bash(git remote *)",
-      "WebFetch(domain:plugins.jenkins.io)"
+      "WebFetch(domain:plugins.jenkins.io)",
+      "mcp__atlassian__getJiraIssue",
+      "mcp__jenkins__getJob",
+      "mcp__jenkins__triggerBuild",
+      "mcp__jenkins__getBuild"
     ]
   }
 }
